@@ -1,22 +1,22 @@
-import { URL } from "./constants";
+import { URL } from './constants';
 
-const checkResponse = (res) => {
+const checkResponse = res => {
   if (res.ok || res.created) {
     return res.json();
   }
-  return res.json().then((err) => {
+  return res.json().then(err => {
     return Promise.reject(err);
   });
 };
-const headersWithContentType = { "Content-Type": "application/json" };
+const headersWithContentType = { 'Content-Type': 'application/json' };
 const headersWithAuthorizeFn = () => ({
-  "Content-Type": "application/json",
-  authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
+  'Content-Type': 'application/json',
+  authorization: `Bearer ${sessionStorage.getItem('auth_token')}`,
 });
 
-export const registerUser = (userData) => {
+export const registerUser = userData => {
   return fetch(`${URL}/signup/`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithContentType,
     body: JSON.stringify(userData),
   }).then(checkResponse);
@@ -24,14 +24,14 @@ export const registerUser = (userData) => {
 
 export const loginUser = (username, password) => {
   return fetch(`${URL}/signin/`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithContentType,
     body: JSON.stringify({ username, password }),
   })
     .then(checkResponse)
-    .then((data) => {
+    .then(data => {
       if (data.access_token) {
-        sessionStorage.setItem("auth_token", data.access_token);
+        sessionStorage.setItem('auth_token', data.access_token);
         return data;
       } else {
         return;
@@ -40,7 +40,7 @@ export const loginUser = (username, password) => {
 };
 
 export const logoutUser = () => {
-  sessionStorage.removeItem("auth_token");
+  sessionStorage.removeItem('auth_token');
 };
 
 export const refreshAndSet = (method, contextSetter) => {
@@ -49,22 +49,22 @@ export const refreshAndSet = (method, contextSetter) => {
 
 export const getOwnUser = () => {
   return fetch(`${URL}/users/me/`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const refreshUser = (contextSetter) => {
+export const refreshUser = contextSetter => {
   try {
-    getOwnUser().then((user) => contextSetter(user));
+    getOwnUser().then(user => contextSetter(user));
   } catch (e) {
-    console.error("Failed updating user");
+    console.error('Failed updating user');
   }
 };
 
-export const updateProfile = (user) => {
+export const updateProfile = user => {
   return fetch(`${URL}/users/me/`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: headersWithAuthorizeFn(),
     body: JSON.stringify(user),
   }).then(checkResponse);
@@ -72,50 +72,50 @@ export const updateProfile = (user) => {
 
 export const getCards = (page = 1) => {
   return fetch(`${URL}/wishes/`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
 export const getOwnWishes = () => {
   return fetch(`${URL}/users/me/wishes`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const getAnotherUserWishes = (username) => {
+export const getAnotherUserWishes = username => {
   return fetch(`${URL}/users/${username}/wishes`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const getAnotherUser = (username) => {
+export const getAnotherUser = username => {
   return fetch(`${URL}/users/${username}`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const queryUser = (query) => {
+export const queryUser = query => {
   return fetch(`${URL}/users/find`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithAuthorizeFn(),
     body: JSON.stringify({ query }),
   }).then(checkResponse);
 };
 
-export const removeWish = (id) => {
+export const removeWish = id => {
   return fetch(`${URL}/wishes/${id}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const addOffer = (offer) => {
+export const addOffer = offer => {
   return fetch(`${URL}/offers`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithAuthorizeFn(),
     body: JSON.stringify(offer),
   }).then(checkResponse);
@@ -123,28 +123,28 @@ export const addOffer = (offer) => {
 
 export const getTopCards = () => {
   return fetch(`${URL}/wishes/top`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
 export const getLastCards = (page = 1) => {
   return fetch(`${URL}/wishes/last`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const getCard = (id) => {
+export const getCard = id => {
   return fetch(`${URL}/wishes/${id}`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const createCard = (wish) => {
+export const createCard = wish => {
   return fetch(`${URL}/wishes`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithAuthorizeFn(),
     body: JSON.stringify(wish),
   }).then(checkResponse);
@@ -152,29 +152,29 @@ export const createCard = (wish) => {
 
 export const updateCard = (card, id) => {
   return fetch(`${URL}/wishes/${id}`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: headersWithAuthorizeFn(),
     body: JSON.stringify(card),
   }).then(checkResponse);
 };
 
-export const copyWish = (id) => {
+export const copyWish = id => {
   return fetch(`${URL}/wishes/${id}/copy`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const removeCard = (id) => {
+export const removeCard = id => {
   return fetch(`${URL}/wishes/${id}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const addCollection = (data) => {
+export const addCollection = data => {
   return fetch(`${URL}/wishlistlists`, {
-    method: "POST",
+    method: 'POST',
     headers: headersWithAuthorizeFn(),
     body: JSON.stringify(data),
   }).then(checkResponse);
@@ -182,21 +182,21 @@ export const addCollection = (data) => {
 
 export const getCollections = () => {
   return fetch(`${URL}/wishlistlists`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const getCollection = (id) => {
+export const getCollection = id => {
   return fetch(`${URL}/wishlistlists/${id}`, {
-    method: "GET",
+    method: 'GET',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };
 
-export const deleteCollection = (id) => {
+export const deleteCollection = id => {
   return fetch(`${URL}/wishlistlists/${id}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: headersWithAuthorizeFn(),
   }).then(checkResponse);
 };

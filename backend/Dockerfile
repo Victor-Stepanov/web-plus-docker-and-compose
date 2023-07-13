@@ -14,13 +14,13 @@ FROM node:16-alpine AS backend
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY --from=builder /app/package*.json ./
 
 RUN npm ci --omit=dev --no-audit --no-fund && npm i -g pm2
 
 COPY --from=builder /app/dist ./dist
 COPY ./ecosystem.config.js ./
-EXPOSE 4444
+EXPOSE 4000
 
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]
 

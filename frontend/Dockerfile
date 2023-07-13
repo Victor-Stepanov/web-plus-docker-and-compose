@@ -4,19 +4,19 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm ci --omit=dev --no-audit --no-fund
 
 COPY . ./
 
-RUN npm run build \ && rm -rf ./scr \ && rm -rf node ./node_modules
+RUN npm run build 
 
 FROM nginx:1.23.1-alpine AS frontend
 
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY nginx/conf.d/default.conf /etc/nginx/conf.d
 
 EXPOSE 80
 
