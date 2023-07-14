@@ -10,7 +10,7 @@ COPY . ./
 
 RUN npm run build 
 
-FROM nginx:1.23.1-alpine AS frontend
+FROM nginx:latest AS frontend
 
 RUN rm -rf /usr/share/nginx/html/*
 
